@@ -1,0 +1,19 @@
+{
+  "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "Debug Local File",
+            "runtimeArgs": [
+                "-r",
+                "ts-node/register"
+            ],
+            "args": "${relativeFile}",
+            "env": {
+                "AWS_PROFILE": "sandbox",
+                "AWS_REGION": "ap-southeast-2"
+            },
+        }
+    ]
+}
