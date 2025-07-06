@@ -13,30 +13,22 @@ interface LambdaStackProps extends StackProps {
 
 export class LambdaStack extends Stack {
 
-    public readonly lambdaIntegration: LambdaIntegration;
+    public readonly spacesLambdaIntegration: LambdaIntegration;
 
     constructor(scope: Construct, id: string, props: LambdaStackProps) {
         super(scope, id, props);
 
-        const helloLambda = new NodejsFunction(this, 'HelloLambda', {
+        const spacesLambda = new NodejsFunction(this, 'SpacesLambda', {
             runtime: Runtime.NODEJS_22_X, // Specify the Node.js runtime
             handler: 'handler', // The file and exported function name
             // Path to the Lambda function code
-            entry: join(__dirname, '..', '..', 'services', 'hello.ts'), 
+            entry: join(__dirname, '..', '..', 'services', 'spaces', 'handler.ts'), 
             environment: {
                 // Add any environmen`t variables here if needed
                 TABLE_NAME: props.spacesTableName.tableName // Pass the table name to the Lambda function
                 }
             });
 
-        // Grant the lambda access to list all s3 buckets
-        // This is just an example, you can modify the permissions as needed
-        helloLambda.addToRolePolicy(new PolicyStatement({
-            effect: Effect.ALLOW,
-            actions: ['s3:ListAllMyBuckets', 's3:ListBuckets'],
-            resources: ['*'], // This is a wildcard (bad practise), you should restrict it to specific buckets if needed
-        }));
-                
-        this.lambdaIntegration = new LambdaIntegration(helloLambda);    
+        this.spacesLambdaIntegration = new LambdaIntegration(spacesLambda);    
     }
 }

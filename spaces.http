@@ -1,2 +1,6 @@
-GET https://gvzbsfbb90.execute-api.ap-southeast-2.amazonaws.com/prod/spaces
+GET https://q289fam59f.execute-api.ap-southeast-2.amazonaws.com/prod/spaces
+###
+POST https://q289fam59f.execute-api.ap-southeast-2.amazonaws.com/prod/spaces
+###
+PUT https://q289fam59f.execute-api.ap-southeast-2.amazonaws.com/prod/spaces
 ###
