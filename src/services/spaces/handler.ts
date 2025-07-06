@@ -1,6 +1,10 @@
 // File: src/services/spaces/handler.ts
 
 import { APIGatewayProxyEvent, APIGatewayProxyResult, Context } from "aws-lambda";
+import { postSpaces } from "./PostSpaces";
+import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
+
+const ddbClient = new DynamoDBClient({});
 
 async function handler(event : APIGatewayProxyEvent, context: Context) : Promise<APIGatewayProxyResult> {
 
@@ -11,9 +15,8 @@ async function handler(event : APIGatewayProxyEvent, context: Context) : Promise
             message = "Handling GET request";
             break;
         case "POST":
-            // Handle POST request
-            message = "Handling POST request";
-            break;
+            const response = postSpaces(event, ddbClient);
+            return response;
         default:
             // Handle other HTTP methods
             message = `Unsupported method: ${event.httpMethod}`;

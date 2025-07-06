@@ -8,7 +8,7 @@ import { Construct } from 'constructs';
 import { join } from 'path';
 
 interface LambdaStackProps extends StackProps {
-    spacesTableName: Table
+    spacesTable: Table
 }
 
 export class LambdaStack extends Stack {
@@ -25,9 +25,17 @@ export class LambdaStack extends Stack {
             entry: join(__dirname, '..', '..', 'services', 'spaces', 'handler.ts'), 
             environment: {
                 // Add any environmen`t variables here if needed
-                TABLE_NAME: props.spacesTableName.tableName // Pass the table name to the Lambda function
+                TABLE_NAME: props.spacesTable.tableName // Pass the table name to the Lambda function
                 }
             });
+
+        spacesLambda.addToRolePolicy(new PolicyStatement({
+            effect: Effect.ALLOW,
+            resources: [props.spacesTable.tableArn],
+            actions:[
+                'dynamodb:PutItem'
+            ]
+        }))
 
         this.spacesLambdaIntegration = new LambdaIntegration(spacesLambda);    
     }

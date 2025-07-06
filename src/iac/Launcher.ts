@@ -6,7 +6,7 @@ import { ApiStack } from "./stacks/ApiStack";
 const app = new App()
 const dataStack = new DataStack(app, "DataStack");
 const lambda = new LambdaStack(app, "LambdaStack", {
-    spacesTableName: dataStack.spacesTable 
+    spacesTable: dataStack.spacesTable 
 });
 new ApiStack(app, "ApiStack", {
     spacesLambdaIntegration: lambda.spacesLambdaIntegration
