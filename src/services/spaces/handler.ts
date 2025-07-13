@@ -6,6 +6,7 @@ import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
 import { getSpaces } from "./GetSpaces";
 import { postSpacesWithDoc } from "./PostSpacesWithDoc";
 import { updateSpace } from "./UpdateSpace";
+import { deleteSpace } from "./DeleteSpace";
 
 const ddbClient = new DynamoDBClient({});
 
@@ -22,6 +23,9 @@ async function handler(event : APIGatewayProxyEvent, context: Context) : Promise
         case "PUT":
             const updateResponse = await updateSpace(event, ddbClient);
             return updateResponse;    
+        case "DELETE":
+            const deleteResponse = await deleteSpace(event, ddbClient);
+            return deleteResponse;    
         default:
             // Handle other HTTP methods
             message = `Unsupported method: ${event.httpMethod}`;

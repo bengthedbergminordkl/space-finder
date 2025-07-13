@@ -35,6 +35,14 @@ async function updateSpace(id: string, newLocation: string) {
     {} as any);
 }
 
+async function deleteSpace(id: string) {
+    return await handler ({
+        httpMethod : 'DELETE',
+        queryStringParameters: { id }
+    } as any,
+    {} as any);
+}
+
 async function main() {
     try {
         const allSpacesResponse = await getAllSpaces();
@@ -52,6 +60,9 @@ async function main() {
         
         const updatedSpaceResponse = await getSpaceById(id);
         console.log(updatedSpaceResponse);  
+
+        const deleteResponse = await deleteSpace(id);
+        console.log(deleteResponse);
 
     } catch (error) {
         console.error("Error in local debug:", error);
