@@ -1,8 +1,12 @@
+import { randomUUID } from "crypto";
+
+export function createRandomId(){
+    return randomUUID();
+}
 
 export class InvalidJsonError extends Error {
     constructor(message: string) {
         super(message);
-        this.name = 'InvalidJsonError';
     }
 }
 
@@ -10,11 +14,11 @@ export function parseJson(jsonString: string): any {
     try {
         return JSON.parse(jsonString);
     } catch (error) {
-        console.error("Failed to parse JSON:", error);
-        const errorMessage = typeof error === 'object' && error !== null && 'message' in error
-            ? (error as { message: string }).message
-            : String(error);
-        throw new InvalidJsonError(errorMessage);
+        if (error instanceof Error) {
+            throw new InvalidJsonError(error.message);
+        } else {
+            throw new InvalidJsonError("Failed to parse JSON");
+        }
     }
 }
 
