@@ -4,18 +4,20 @@ POST https://q289fam59f.execute-api.ap-southeast-2.amazonaws.com/prod/spaces
 Content-Type: application/json
 
 {
-  "location": "Brisbane"
+  "location": "Brisbane",
+  "name": "Brisbane Space"
 }
 ###
-GET https://q289fam59f.execute-api.ap-southeast-2.amazonaws.com/prod/spaces?id=12345
+GET https://q289fam59f.execute-api.ap-southeast-2.amazonaws.com/prod/spaces?id=7e998eff-6c95-415c-b224-b65c68536a54
 ###
-PUT https://q289fam59f.execute-api.ap-southeast-2.amazonaws.com/prod/spaces?id=12345
+
+PUT https://q289fam59f.execute-api.ap-southeast-2.amazonaws.com/prod/spaces?id=7e998eff-6c95-415c-b224-b65c68536a54
 Content-Type: application/json
 
 {
-  "location": "Brisbane"
+  "location": "Ipswich a"
 }
 ###
 
-DELETE https://q289fam59f.execute-api.ap-southeast-2.amazonaws.com/prod/spaces?id=12345
+DELETE https://q289fam59f.execute-api.ap-southeast-2.amazonaws.com/prod/spaces?id=7e998eff-6c95-415c-b224-b65c68536a54
 ###
