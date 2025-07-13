@@ -5,22 +5,15 @@ import { APIGatewayProxyEvent, APIGatewayProxyResult } from "aws-lambda";
 import { v4 } from "uuid";
 import { isValidSpaceItem } from "../shared/DataValidator";
 import { marshall } from "@aws-sdk/util-dynamodb";
+import { parseJson } from "../shared/Utils";
 
 export async function postSpaces(event: APIGatewayProxyEvent, ddbClient: DynamoDBClient): Promise<APIGatewayProxyResult> {
 
     const randomId = v4();
-    const item = JSON.parse(event.body!);
+    const item = parseJson(event.body!);
     item.id = randomId; // Ensure the item has an ID field
 
-    try {
-        isValidSpaceItem(item); // Validate the item structure
-    }
-    catch (error) {
-        return {
-            statusCode: 400,
-            body: JSON.stringify({ message: error })
-        };  
-    }
+    isValidSpaceItem(item); // Validate the item structure
 
     const result = await ddbClient.send(new PutItemCommand({
         TableName: process.env.TABLE_NAME,

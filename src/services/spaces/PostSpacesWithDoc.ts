@@ -5,24 +5,18 @@ import { DynamoDBDocumentClient, PutCommand } from "@aws-sdk/lib-dynamodb";
 import { APIGatewayProxyEvent, APIGatewayProxyResult } from "aws-lambda";
 import { v4 } from "uuid";
 import { isValidSpaceItem } from "../shared/DataValidator";
+import { parseJson } from "../shared/Utils";
 
 export async function postSpacesWithDoc(event: APIGatewayProxyEvent, ddbClient: DynamoDBClient): Promise<APIGatewayProxyResult> {
 
     const ddbDocClient = DynamoDBDocumentClient.from(ddbClient);
 
+
     const randomId = v4();
-    const item = JSON.parse(event.body!);
+    const item = parseJson(event.body!);
     item.id = randomId; // Ensure the item has an ID field
 
-    try {
-        isValidSpaceItem(item); // Validate the item structure
-    }
-    catch (error) {
-        return {
-            statusCode: 400,
-            body: JSON.stringify({ message: error })
-        };  
-    }
+    isValidSpaceItem(item); // Validate the item structure
 
     const result = await ddbDocClient.send(new PutCommand({
         TableName: process.env.TABLE_NAME,
@@ -32,5 +26,5 @@ export async function postSpacesWithDoc(event: APIGatewayProxyEvent, ddbClient: 
     return {
         statusCode: 201,
         body: JSON.stringify({id: randomId})
-    }
+    };
 }
