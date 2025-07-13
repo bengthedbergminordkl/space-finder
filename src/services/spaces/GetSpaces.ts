@@ -1,4 +1,5 @@
 import { DynamoDBClient, GetItemCommand, ScanCommand } from "@aws-sdk/client-dynamodb";
+import { marshall, unmarshall } from "@aws-sdk/util-dynamodb";
 import { APIGatewayProxyEvent, APIGatewayProxyResult } from "aws-lambda";
 
 export async function getSpaces(event: APIGatewayProxyEvent, ddbClient: DynamoDBClient): Promise<APIGatewayProxyResult> {
@@ -8,17 +9,16 @@ export async function getSpaces(event: APIGatewayProxyEvent, ddbClient: DynamoDB
         if (event.queryStringParameters.id) {
             // If an ID is provided, we can implement a specific get by ID logic here.
             const id = event.queryStringParameters.id;
+            const key = marshall({ id });
             const result = await ddbClient.send(new GetItemCommand({
                 TableName: process.env.TABLE_NAME,
-                Key: {
-                    id: { S: id }
-                }
+                Key: key
             }));
             if (result.Item) {
-                console.log(result.Item);
+                const unmarshalledItems = unmarshall(result.Item);
                 return {
                     statusCode: 200,
-                    body: JSON.stringify(result.Item)
+                    body: JSON.stringify(unmarshalledItems)
                 };
             }
             // If no item is found, we can return a 404 Not Found response.
@@ -40,11 +40,11 @@ export async function getSpaces(event: APIGatewayProxyEvent, ddbClient: DynamoDB
         const result = await ddbClient.send(new ScanCommand({
             TableName: process.env.TABLE_NAME,
         }));
-        console.log(result.Items);
 
+        const unmarshalledItems = result.Items ? result.Items.map(item => unmarshall(item)) : [];   
         return {
             statusCode: 200,
-            body: JSON.stringify(result.Items)
+            body: JSON.stringify(unmarshalledItems)
         }
     }
 }

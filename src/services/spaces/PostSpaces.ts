@@ -20,7 +20,6 @@ export async function postSpaces(event: APIGatewayProxyEvent, ddbClient: DynamoD
             }
         }
     }));
-    console.log(result);
 
     return {
         statusCode: 201,
