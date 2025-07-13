@@ -26,21 +26,33 @@ async function getAllSpaces() {
     } as any, 
     {} as any);
 }
+async function updateSpace(id: string, newLocation: string) {
+    return await handler ({
+        httpMethod : 'PUT',
+        queryStringParameters: { id },
+        body: JSON.stringify({ location: newLocation })
+    } as any, 
+    {} as any);
+}
 
 async function main() {
     try {
         const allSpacesResponse = await getAllSpaces();
         console.log(allSpacesResponse);
-        console.log(JSON.parse(allSpacesResponse.body));
-
+        
         const addSpaceResponse = await addSpace('Sydney');
         console.log(addSpaceResponse);
-        console.log(JSON.parse(addSpaceResponse.body));
-
+        
         const id = JSON.parse(addSpaceResponse.body).id;
         const spaceResponse = await getSpaceById(id);
         console.log(spaceResponse);
-        console.log(JSON.parse(spaceResponse.body));
+
+        const updateResponse = await updateSpace(id, 'Melbourne');
+        console.log(updateResponse);        
+        
+        const updatedSpaceResponse = await getSpaceById(id);
+        console.log(updatedSpaceResponse);  
+
     } catch (error) {
         console.error("Error in local debug:", error);
     }
