@@ -9,7 +9,7 @@ process.env.TABLE_NAME = 'SpacesTable-029d437985ad';
 async function addSpace(location: string) {
     return await handler ({
         httpMethod : 'POST',
-        body: JSON.stringify({ location })
+        body: JSON.stringify({ location, name: location })
     } as any, 
     {} as any);
 }
